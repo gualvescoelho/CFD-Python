@@ -1,14 +1,28 @@
 #Falta organizar coordenadas, para pegar os valores 
 #Procurar a coluna desejada, ja é possivel encontrar
 listLinha = []
+listCoord = []
 
 dados = 'a'
+dados_ant = 'a'
+countLinhas = False
 
 with open('U-1.txt', 'r') as arquivo_binario:
     while dados:
         dados = arquivo_binario.readline()
-        linha = dados.rsplit(' ')
-        listLinha.append(linha)
+
+        if(dados and dados_ant == '\n'):
+            countLinhas = True
+
+        if(dados != '\n'):
+            if countLinhas == True:
+                linha = dados[:-2].rsplit(' ')
+                listLinha.append(linha)
+            else:
+                coord = dados[:-2].rsplit(' ')
+                listCoord.append(coord)
+            
+        dados_ant = dados
 
 i = 0
 

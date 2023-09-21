@@ -4,6 +4,7 @@ import numpy as np
 
 class correlacao:
     def __init__(self):
+        super().__init__()
         self.corrList = []
         self.yList = []
         self.xList = []
@@ -11,7 +12,10 @@ class correlacao:
         self.listCoord = []
         self.timeSteps = []
 
-    def readFile(self, file = ''):
+    def do(self, file):
+        self.readFile(file)
+
+    def readFile(self, file):
         dados = 'start'
         dados_ant = 'start'
         countLinhas = False
@@ -41,7 +45,6 @@ class correlacao:
         for i in range(len(list)):
             list[i] = [valor for valor in list[i] if valor != '']
 
-# Atribuir aqui o calculo da correlação completo, para quando for necessário fazer o de todos, lera linha, e fazer
     def getUx(self):
         self.clearLists()
         for lista in self.listLinha:
@@ -95,28 +98,13 @@ class correlacao:
             for timestep, corr in zip(self.timeSteps, self.corrList):
                 arquivo.write(str(timestep) +'\t'+str(corr)+'\n')
 
+    def generateGraph(self):
+        minimo = min(self.corrList)
+        maximo = max(self.corrList)
 
-def main():
-    # Crie uma instância da classe
-    objeto = correlacao()
-
-    objeto.readFile()
-    objeto.getUx()
-
-    # objeto.findUx('0.001')
-    # print(objeto.corrList)
-
-    minimo = min(objeto.corrList)
-    maximo = max(objeto.corrList)
-
-    plt.plot(objeto.timeSteps, objeto.corrList)
-    listOfTicksX = np.arange(0,objeto.timeSteps.__len__(),2000)
-    plt.xticks(listOfTicksX)
-    plt.suptitle("Minimo: "+str(minimo)+"\n Maximo: "+str(maximo)) 
-    plt.autoscale()
-    plt.show()
-
-    objeto.writeCorrFile("oi")
-
-if __name__ == "__main__":
-    main()
+        plt.plot(self.timeSteps, self.corrList)
+        listOfTicksX = np.arange(0,self.timeSteps.__len__(),2000)
+        plt.xticks(listOfTicksX)
+        plt.suptitle("Minimo: "+str(minimo)+"\n Maximo: "+str(maximo)) 
+        plt.autoscale()
+        plt.show()

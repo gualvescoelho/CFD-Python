@@ -104,8 +104,10 @@ def main():
     maximo = max(objeto.corrList)
 
     plt.plot(objeto.timeSteps, objeto.corrList)
-    listOfTicks = np.arange(0,objeto.timeSteps.__len__(),2000)
-    plt.xticks(listOfTicks)
+    listOfTicksX = np.arange(0,objeto.timeSteps.__len__(),2000)
+    plt.xticks(listOfTicksX)
+    plt.suptitle("Minimo: "+str(minimo)+"\n Maximo: "+str(maximo)) 
+    plt.autoscale()
     plt.show()
 
 if __name__ == "__main__":

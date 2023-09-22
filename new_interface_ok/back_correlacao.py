@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 class correlacao:
     def __init__(self):
@@ -13,14 +14,15 @@ class correlacao:
         self.timeSteps = []
 
     def do(self, file):
-        self.readFile(file)
+        self.file = file
+        self.readFile()
 
-    def readFile(self, file):
+    def readFile(self):
         dados = 'start'
         dados_ant = 'start'
         countLinhas = False
 
-        with open('U-1.txt', 'r') as arquivo_binario:
+        with open(self.file, 'r') as arquivo_binario:
             while dados:
                 dados = arquivo_binario.readline()
 
@@ -57,8 +59,10 @@ class correlacao:
             self.xList.clear()
             
 
-    def findUx(self, timestep):
+    def findUx(self, timestep, path):
         self.clearLists()
+        self.xList.clear()
+        self.corrList.clear()
         for lista in self.listLinha:
             if lista[0] == timestep:
                 i = 0
@@ -67,9 +71,17 @@ class correlacao:
                         self.xList.append(float(Ux))
                     i += 1
                 self.calcCorrelacao()
-                break
+                
+        basename = str(os.path.basename(self.file))
+        file = str(str(path)+'\\'+basename +'_'+ timestep)
+        with open (file, 'w+') as arquivo:
+            for timestep, corr in zip(self.timeSteps, self.corrList):
+                arquivo.write(str(timestep) +'\t'+str(corr)+'\n')
+        
+        self.xList.clear()
 
     def getY(self):
+        self.yList.clear()
         self.yCentral = self.listCoord[self.listCoord.__len__()//2][1]
 
         for y in self.listCoord:
@@ -93,12 +105,17 @@ class correlacao:
         self.xList.clear()
         self.corrList.clear()
 
-    def writeCorrFile(self, file):
+    def writeCorrFile(self, path):
+        self.getUx()
+        basename = str(os.path.basename(self.file))
+        file = str(str(path)+'\\'+basename)
         with open (file, 'w+') as arquivo:
             for timestep, corr in zip(self.timeSteps, self.corrList):
                 arquivo.write(str(timestep) +'\t'+str(corr)+'\n')
 
     def generateGraph(self):
+        self.corrList.clear()
+        self.getUx()
         minimo = min(self.corrList)
         maximo = max(self.corrList)
 

@@ -12,7 +12,7 @@ class TelaCorrelacao(QWidget):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.label = QLabel("Nesta tela é possível gerar gráfico da correlação\nE obter o valor para apenas um timestep, caso definido", self)
+        self.label = QLabel("Nesta tela é possível gerar gráfico da correlação\nE obter o valor para apenas um timestep, caso definido\nRecomendado o uso de apenas um arquivo por vez!!", self)
         self.label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.label)
 
@@ -25,7 +25,7 @@ class TelaCorrelacao(QWidget):
         # Campos de entrada
         self.timestep = QLineEdit(self)
         self.timestep.setPlaceholderText("Defina um timestep para apenas um momento: ")
-        self.timestep.text = 0
+        self.timestep.setText('0')
         self.layout.addWidget(self.timestep)
 
         # Checkbox 1
@@ -65,12 +65,13 @@ class TelaCorrelacao(QWidget):
         for path in self.drag_drop_widget.file_paths:
             self.correlacao.do(path)
 
-            if self.timestep.text != 0:
+            if self.timestep.text() != '0':
                 self.selected_directory = self.select_directory()
 
                 if not self.selected_directory:
                     self.show_warning_message("Nenhum diretório selecionado!")
                     return
+                
                 self.correlacao.findUx(self.timestep.text(), self.selected_directory)
 
             if graficoChecked:
@@ -82,7 +83,8 @@ class TelaCorrelacao(QWidget):
                     self.show_warning_message("Nenhum diretório selecionado!")
                     return
                 
-                self.correlacao.writeCorrFile(self.select_directory())
+                self.correlacao.writeCorrFile(self.selected_directory)
+
 
     def show_warning_message(self, message):
         msg_box = QMessageBox(self)

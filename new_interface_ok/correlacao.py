@@ -62,6 +62,8 @@ class TelaCorrelacao(QWidget):
         graficoChecked = self.checkboxGrafico.isChecked()
         arquivoChecked = self.checkboxArquivo.isChecked()
 
+        self.selected_directory = self.select_directory()
+        
         for path in self.drag_drop_widget.file_paths:
             self.correlacao.do(path)
 
@@ -77,7 +79,6 @@ class TelaCorrelacao(QWidget):
             if graficoChecked:
                 self.correlacao.generateGraph()
             if arquivoChecked:
-                self.selected_directory = self.select_directory()
 
                 if not self.selected_directory:
                     self.show_warning_message("Nenhum diretório selecionado!")
